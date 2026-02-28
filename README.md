@@ -50,12 +50,6 @@ Pour utiliser l'API Groq sans exposer la clé dans le frontend, un petit proxy N
 copy .env.example .env
 ```
 
-Option Windows (automatique) :
-
-```powershell
-./setup-env.ps1 -ApiKey "votre_cle_groq"
-```
-
 Puis éditez `.env` et renseignez votre clé Groq.
 
 - Démarrage :
