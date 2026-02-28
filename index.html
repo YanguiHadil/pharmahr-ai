@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmaHR AI - Assistant RH Intelligent</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 2L2 7v10c0 5.5 3.8 9.7 10 11 6.2-1.3 10-5.5 10-11V7l-10-5z"/>
+                    <path d="M12 8v8M8 12h8"/>
+                </svg>
+                <h1>PharmaHR AI</h1>
+            </div>
+            <div class="header-status">
+                <span class="status-indicator"></span>
+                <span>Agent Intelligent Actif</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <button class="nav-item active" data-view="dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-view="chat">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span>Conversation</span>
+                </button>
+                <button class="nav-item" data-view="planning">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="4" width="18" height="18" rx="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span>Planning</span>
+                </button>
+                <button class="nav-item" data-view="surcharge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                    <span>Analyse Activité</span>
+                </button>
+                <button class="nav-item" data-view="conformite">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    <span>Conformité</span>
+                </button>
+                <button class="nav-item" data-view="demandes">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M9 11l3 3L22 4"/>
+                        <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>Demandes RH</span>
+                </button>
+                <button class="nav-item" data-view="communication">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    <span>Communication</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <!-- Dashboard View -->
+            <section id="dashboard-view" class="view active">
+                <div class="view-header">
+                    <h2>Tableau de Bord RH</h2>
+                    <p class="subtitle">Vue d'ensemble de la gestion des ressources humaines</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="stat-employees">12</div>
+                            <div class="stat-label">Employés Actifs</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="stat-activity">Normal</div>
+                            <div class="stat-label">Niveau d'Activité</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="stat-hours">324h</div>
+                            <div class="stat-label">Heures Planifiées</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="stat-compliance">100%</div>
+                            <div class="stat-label">Conformité</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Alertes Récentes</h3>
+                        <div id="recent-alerts" class="alerts-list">
+                            <div class="alert-item success">
+                                <div class="alert-icon">✓</div>
+                                <div class="alert-text">
+                                    <div class="alert-title">Système opérationnel</div>
+                                    <div class="alert-time">Il y a 2 minutes</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>Analyse Rapide</h3>
+                        <div class="quick-stats">
+                            <div class="quick-stat-item">
+                                <span class="quick-label">Pharmaciens diplômés:</span>
+                                <span class="quick-value" id="quick-pharmacists">4</span>
+                            </div>
+                            <div class="quick-stat-item">
+                                <span class="quick-label">Préparateurs:</span>
+                                <span class="quick-value" id="quick-assistants">5</span>
+                            </div>
+                            <div class="quick-stat-item">
+                                <span class="quick-label">Personnel administratif:</span>
+                                <span class="quick-value" id="quick-admin">3</span>
+                            </div>
+                            <div class="quick-stat-item">
+                                <span class="quick-label">Taux de couverture:</span>
+                                <span class="quick-value success">98%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat View -->
+            <section id="chat-view" class="view">
+                <div class="view-header">
+                    <h2>Assistant Conversationnel</h2>
+                    <p class="subtitle">Posez vos questions concernant planning, congés, équipes...</p>
+                </div>
+
+                <div class="chat-container">
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message bot">
+                            <div class="message-avatar">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                                    <line x1="9" y1="9" x2="9.01" y2="9"/>
+                                    <line x1="15" y1="9" x2="15.01" y2="9"/>
+                                </svg>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">
+                                    Bonjour ! Je suis votre assistant RH intelligent pour pharmacie. 
+                                    Je peux vous aider avec :
+                                    <ul>
+                                        <li>Consultation du planning et des horaires</li>
+                                        <li>Demandes de congés et absences</li>
+                                        <li>Analyse de surcharge d'activité</li>
+                                        <li>Vérification de conformité réglementaire</li>
+                                        <li>Optimisation des ressources</li>
+                                    </ul>
+                                    Comment puis-je vous aider aujourd'hui ?
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-quick-actions">
+                        <button class="quick-action" data-query="planning">📅 Voir mon planning</button>
+                        <button class="quick-action" data-query="conges">🏖️ Demander un congé</button>
+                        <button class="quick-action" data-query="equipe">👥 État de l'équipe</button>
+                        <button class="quick-action" data-query="conformite">✓ Vérifier conformité</button>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <input type="text" id="chat-input" placeholder="Tapez votre message..." class="chat-input">
+                        <button id="chat-send" class="chat-send-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <line x1="22" y1="2" x2="11" y2="13"/>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Planning View -->
+            <section id="planning-view" class="view">
+                <div class="view-header">
+                    <h2>Génération de Planning Intelligent</h2>
+                    <p class="subtitle">Planification automatique avec respect des contraintes réglementaires</p>
+                </div>
+
+                <div class="planning-controls">
+                    <div class="control-group">
+                        <label>Semaine</label>
+                        <input type="week" id="planning-week" class="input-field">
+                    </div>
+                    <div class="control-group">
+                        <label>Niveau d'activité prévu</label>
+                        <select id="planning-activity" class="input-field">
+                            <option value="normal">Normal</option>
+                            <option value="eleve">Élevé</option>
+                            <option value="tres-eleve">Très élevé</option>
+                        </select>
+                    </div>
+                    <button id="generate-planning" class="btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                            <line x1="12" y1="22.08" x2="12" y2="12"/>
+                        </svg>
+                        Générer Planning Optimisé
+                    </button>
+                </div>
+
+                <div id="planning-result" class="planning-result"></div>
+                <div id="planning-alerts" class="planning-alerts"></div>
+            </section>
+
+            <!-- Surcharge View -->
+            <section id="surcharge-view" class="view">
+                <div class="view-header">
+                    <h2>Analyse Anticipée de Surcharge</h2>
+                    <p class="subtitle">Prédiction et recommandations basées sur l'activité</p>
+                </div>
+
+                <div class="surcharge-controls">
+                    <div class="control-group">
+                        <label>Indicateur d'activité (ordonnances/jour)</label>
+                        <input type="number" id="activity-input" class="input-field" placeholder="Ex: 150" min="0" step="10">
+                    </div>
+                    <div class="control-group">
+                        <label>Nombre d'employés présents</label>
+                        <input type="number" id="employees-input" class="input-field" value="8" min="1" max="20">
+                    </div>
+                    <button id="analyze-surcharge" class="btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        Analyser et Recommander
+                    </button>
+                </div>
+
+                <div id="surcharge-result" class="surcharge-result"></div>
+                <div id="surcharge-recommendations" class="recommendations"></div>
+            </section>
+
+            <!-- Conformité View -->
+            <section id="conformite-view" class="view">
+                <div class="view-header">
+                    <h2>Vérification de Conformité Réglementaire</h2>
+                    <p class="subtitle">Validation automatique des règles du secteur pharmaceutique</p>
+                </div>
+
+                <div class="conformite-actions">
+                    <button id="check-conformite" class="btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        Lancer Audit de Conformité
+                    </button>
+                </div>
+
+                <div id="conformite-result" class="conformite-result"></div>
+            </section>
+
+            <!-- Demandes RH View -->
+            <section id="demandes-view" class="view">
+                <div class="view-header">
+                    <h2>Gestion des Demandes RH</h2>
+                    <p class="subtitle">Soumettez et consultez vos demandes de congés et absences</p>
+                </div>
+
+                <div class="tabs-container">
+                    <div class="tabs-nav">
+                        <button class="tab-btn active" data-tab="demander-conge">📝 Demander un Congé</button>
+                        <button class="tab-btn" data-tab="mes-demandes">📋 Mes Demandes</button>
+                        <button class="tab-btn" data-tab="absences">🚫 Signaler une Absence</button>
+                    </div>
+                </div>
+
+                <!-- Formulaire Congé -->
+                <div id="demander-conge-tab" class="tab-content active">
+                    <div class="form-card">
+                        <h3>Soumettre une Demande de Congé</h3>
+                        
+                        <div class="form-group">
+                            <label>Nom / Sélectionner Employé</label>
+                            <select id="leave-employee" class="input-field">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="1">Dr. Sophie Martin</option>
+                                <option value="2">Dr. Pierre Dubois</option>
+                                <option value="3">Dr. Marie Laurent</option>
+                                <option value="4">Dr. Jean Moreau</option>
+                                <option value="5">Alice Bernard</option>
+                                <option value="6">Thomas Petit</option>
+                                <option value="7">Clara Roux</option>
+                                <option value="8">Lucas Garcia</option>
+                                <option value="9">Emma Leroy</option>
+                                <option value="10">Julie Bonnet</option>
+                                <option value="11">Marc Simon</option>
+                                <option value="12">Sarah Blanc</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date de Début</label>
+                                <input type="date" id="leave-start" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Date de Fin</label>
+                                <input type="date" id="leave-end" class="input-field">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Type de Congé</label>
+                            <select id="leave-type" class="input-field">
+                                <option value="vacances">Vacances</option>
+                                <option value="formation">Formation</option>
+                                <option value="personnel">Congé Personnel</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Commentaire (optionnel)</label>
+                            <textarea id="leave-comment" class="input-field" rows="3" placeholder="Justification ou détails..."></textarea>
+                        </div>
+
+                        <button id="submit-leave" class="btn-primary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            Soumettre la Demande
+                        </button>
+
+                        <div id="leave-validation" style="margin-top: 1rem;"></div>
+                    </div>
+                </div>
+
+                <!-- Mes Demandes -->
+                <div id="mes-demandes-tab" class="tab-content">
+                    <div id="my-requests-list" class="requests-list">
+                        <div class="empty-state">
+                            <p>Aucune demande actuellement</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Signaler Absence -->
+                <div id="absences-tab" class="tab-content">
+                    <div class="form-card">
+                        <h3>Signaler une Absence</h3>
+                        
+                        <div class="form-group">
+                            <label>Employé</label>
+                            <select id="absence-employee" class="input-field">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="1">Dr. Sophie Martin</option>
+                                <option value="2">Dr. Pierre Dubois</option>
+                                <option value="3">Dr. Marie Laurent</option>
+                                <option value="4">Dr. Jean Moreau</option>
+                                <option value="5">Alice Bernard</option>
+                                <option value="6">Thomas Petit</option>
+                                <option value="7">Clara Roux</option>
+                                <option value="8">Lucas Garcia</option>
+                                <option value="9">Emma Leroy</option>
+                                <option value="10">Julie Bonnet</option>
+                                <option value="11">Marc Simon</option>
+                                <option value="12">Sarah Blanc</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="absence-date" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Motif</label>
+                                <select id="absence-reason" class="input-field">
+                                    <option value="">-- Sélectionner --</option>
+                                    <option value="maladie">Maladie</option>
+                                    <option value="urgence">Urgence Familiale</option>
+                                    <option value="formation">Formation</option>
+                                    <option value="autre">Autre</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Justificatif (optionnel)</label>
+                            <textarea id="absence-justification" class="input-field" rows="2" placeholder="Détails..."></textarea>
+                        </div>
+
+                        <button id="submit-absence" class="btn-primary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M9 11l3 3L22 4"/>
+                                <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Signaler Absence
+                        </button>
+
+                        <div id="absence-validation" style="margin-top: 1rem;"></div>
+                    </div>
+
+                    <div class="form-card" style="margin-top: 2rem;">
+                        <h3>Absences Actuelles</h3>
+                        <div id="current-absences-list" class="absences-list">
+                            <div class="empty-state">
+                                <p>Aucune absence enregistrée</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Communication View -->
+            <section id="communication-view" class="view">
+                <div class="view-header">
+                    <h2>Communication Interne</h2>
+                    <p class="subtitle">Messagerie instantanée et annonces de l'équipe</p>
+                </div>
+
+                <div class="tabs-container">
+                    <div class="tabs-nav">
+                        <button class="tab-btn active" data-tab="messagerie">💬 Messagerie</button>
+                        <button class="tab-btn" data-tab="annonces">📢 Annonces</button>
+                    </div>
+                </div>
+
+                <!-- Messagerie Tab -->
+                <div id="messagerie-tab" class="tab-content active">
+                    <div class="communication-grid">
+                        <!-- Liste des conversations -->
+                        <div class="conversations-panel">
+                            <div class="panel-header">
+                                <h3>Conversations</h3>
+                                <button id="new-conversation-btn" class="btn-icon" title="Nouvelle conversation">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <line x1="12" y1="8" x2="12" y2="16"/>
+                                        <line x1="8" y1="12" x2="16" y2="12"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div id="conversations-list" class="conversations-list">
+                                <!-- Les conversations seront ajoutées dynamiquement -->
+                            </div>
+                        </div>
+
+                        <!-- Zone de messagerie -->
+                        <div class="messaging-panel">
+                            <div id="messaging-header" class="messaging-header">
+                                <div class="conversation-info">
+                                    <div class="conversation-avatar"></div>
+                                    <div>
+                                        <h3 id="current-conversation-name">Sélectionnez une conversation</h3>
+                                        <span id="current-conversation-status" class="conversation-status"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="messages-container" class="messages-container">
+                                <div class="empty-state">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                    </svg>
+                                    <p>Sélectionnez une conversation pour commencer</p>
+                                </div>
+                            </div>
+
+                            <div id="message-input-area" class="message-input-area" style="display: none;">
+                                <input type="text" id="message-input" class="message-input" placeholder="Tapez votre message...">
+                                <button id="send-message-btn" class="btn-send">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <line x1="22" y1="2" x2="11" y2="13"/>
+                                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Annonces Tab -->
+                <div id="annonces-tab" class="tab-content">
+                    <div class="announcements-container">
+                        <!-- Formulaire de création d'annonce (visible uniquement pour les managers) -->
+                        <div class="form-card" id="announcement-form-card">
+                            <h3>📢 Nouvelle Annonce</h3>
+                            
+                            <div class="form-group">
+                                <label>Titre de l'Annonce</label>
+                                <input type="text" id="announcement-title" class="input-field" placeholder="Ex: Nouvelle procédure de sécurité">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Priorité</label>
+                                <select id="announcement-priority" class="input-field">
+                                    <option value="normal">Normale</option>
+                                    <option value="important">Importante</option>
+                                    <option value="urgent">Urgente</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Message</label>
+                                <textarea id="announcement-message" class="input-field" rows="4" placeholder="Détails de l'annonce..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Destinataires</label>
+                                <select id="announcement-recipients" class="input-field">
+                                    <option value="all">Toute l'équipe</option>
+                                    <option value="pharmaciens">Pharmaciens uniquement</option>
+                                    <option value="preparateurs">Préparateurs uniquement</option>
+                                    <option value="administratif">Personnel administratif uniquement</option>
+                                </select>
+                            </div>
+
+                            <button id="publish-announcement-btn" class="btn-primary">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+                                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+                                    <path d="M2 2l7.586 7.586"/>
+                                    <circle cx="11" cy="11" r="2"/>
+                                </svg>
+                                Publier l'Annonce
+                            </button>
+
+                            <div id="announcement-validation" style="margin-top: 1rem;"></div>
+                        </div>
+
+                        <!-- Liste des annonces -->
+                        <div class="announcements-list-container">
+                            <h3>Annonces Récentes</h3>
+                            <div id="announcements-list" class="announcements-list">
+                                <!-- Les annonces seront ajoutées dynamiquement -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification-toast" class="notification-toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
