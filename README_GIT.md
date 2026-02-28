@@ -94,19 +94,21 @@ cd pharmahr-ai
 ```
 
 2. **Configurer la clé Groq**
-```javascript
-// Dans app.js, ligne ~32
-const GROQ_API_KEY = 'votre_clé_groq_ici';
+```bash
+copy .env.example .env
 ```
+
+Puis renseigner `GROQ_API_KEY` dans le fichier `.env`.
 
 3. **Démarrer le serveur**
 ```bash
-python -m http.server 8000
+npm install
+npm start
 ```
 
 4. **Accéder à l'application**
 ```
-http://localhost:8000
+http://localhost:3000
 ```
 
 ---
@@ -200,9 +202,9 @@ Les données sont automatiquement sauvegardées dans `localStorage` sous la clé
 
 ## 🔧 Configuration Groq
 
-```javascript
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_API_KEY = 'gsk_...'; // Votre clé API
+```bash
+copy .env.example .env
+# puis renseigner GROQ_API_KEY dans .env
 ```
 
 **Modèle utilisé** : `llama-3.1-8b-instant`

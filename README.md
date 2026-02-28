@@ -44,16 +44,30 @@ Cette application 100% frontend simule un assistant RH complet pour le secteur p
 Pour utiliser l'API Groq sans exposer la clé dans le frontend, un petit proxy Node.js est fourni :
 
 - Fichier: `server.js`
+- Configuration :
+
+```bash
+copy .env.example .env
+```
+
+Option Windows (automatique) :
+
+```powershell
+./setup-env.ps1 -ApiKey "votre_cle_groq"
+```
+
+Puis éditez `.env` et renseignez votre clé Groq.
+
 - Démarrage :
 
 ```bash
 npm install
-GROQ_API_KEY=ta_cle_personnelle node server.js
+npm start
 ```
 
 Le frontend enverra les requêtes au proxy `http://localhost:3000/groq`, qui relaiera vers l'API Groq.
 
-Remarque : remplacez `ta_cle_personnelle` par votre clé réelle. Ne committez pas cette clé dans le dépôt.
+Remarque : ne committez jamais le fichier `.env` ni votre clé réelle dans le dépôt.
 
   - Ajout de ressources
   - Optimisation des horaires
@@ -99,16 +113,15 @@ Remarque : remplacez `ta_cle_personnelle` par votre clé réelle. Ne committez p
 ## 🚀 Installation et Utilisation
 
 ### Prérequis
-- Aucun ! Application 100% frontend
+- Node.js 18+
 - Navigateur web moderne (Chrome, Firefox, Edge, Safari)
 
 ### Lancement
 1. Ouvrir le dossier `PharmaHR_AI`
-2. Double-cliquer sur `index.html`
-3. L'application se lance automatiquement dans votre navigateur
-
-### Pas de serveur nécessaire !
-L'application fonctionne entièrement en local, sans backend ni API externe.
+2. Copier `.env.example` vers `.env` et renseigner `GROQ_API_KEY`
+3. Exécuter `npm install`
+4. Exécuter `npm start`
+5. Ouvrir `http://localhost:3000`
 
 ## 🎯 Démonstration pour le Jury
 
@@ -174,6 +187,9 @@ L'application fonctionne entièrement en local, sans backend ni API externe.
 ```
 PharmaHR_AI/
 │
+├── server.js           # Proxy sécurisé vers API Groq
+├── package.json        # Dépendances backend
+├── .env.example        # Exemple de variables d'environnement
 ├── index.html          # Structure HTML complète
 ├── styles.css          # Design moderne et responsive
 ├── app.js              # Logique métier et IA simulée
@@ -184,6 +200,7 @@ PharmaHR_AI/
 - **HTML5** : Structure sémantique
 - **CSS3** : Design moderne avec variables CSS, gradients, animations
 - **JavaScript Vanilla** : Logique applicative pure, sans framework
+- **Node.js + Express** : Proxy backend pour sécuriser la clé API
 
 ### Modules Logiciels
 1. **NavigationSystem** : Gestion des vues et navigation
