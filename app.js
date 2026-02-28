@@ -1,9 +1,9 @@
-﻿// ===================================================================
+// ===================================================================
 // PHARMAHR AI - ASSISTANT INTELLIGENT RH POUR PHARMACIE
-// VERSION 2.0 - AGENT D├ëCISIONNEL R├ëEL AVEC GROQ
+// VERSION 2.0 - AGENT DÉCISIONNEL RÉEL AVEC GROQ
 // ===================================================================
 
-// ===== DONN├ëES SIMUL├ëES =====
+// ===== DONNÉES SIMULÉES =====
 const employees = [
     { id: 1, name: "Dr. Sophie Martin", role: "pharmacien", diplome: true, maxHours: 35 },
     { id: 2, name: "Dr. Pierre Dubois", role: "pharmacien", diplome: true, maxHours: 35 },
@@ -20,7 +20,7 @@ const employees = [
 ];
 
 const absences = [
-    { employeeId: 3, date: "2026-03-02", reason: "Cong├®" },
+    { employeeId: 3, date: "2026-03-02", reason: "Congé" },
     { employeeId: 7, date: "2026-03-03", reason: "Formation" }
 ];
 
@@ -92,7 +92,7 @@ async function callGroqLLM(userMessage, opts = {}) {
     }
 }
 
-// ===== PROMPT SYST├êME AGENT D├ëCISIONNEL =====
+// ===== PROMPT SYSTÈME AGENT DÉCISIONNEL =====
 function buildAgentSystemPrompt() {
     const pharmaciens = employees.filter(e => e.role === 'pharmacien');
     const absentsAujourdHui = absences.filter(a => a.date === new Date().toISOString().slice(0,10));
@@ -101,46 +101,46 @@ function buildAgentSystemPrompt() {
     const totalPresents = employees.length - absentsAujourdHui.length;
     const couverture = Math.round((totalPresents / employees.length) * 100);
 
-    return `Tu es PharmaHR AI, un agent d├®cisionnel intelligent sp├®cialis├® RH pour pharmacies.
+    return `Tu es PharmaHR AI, un agent décisionnel intelligent spécialisé RH pour pharmacies.
 
-├ëTAT ACTUEL DE LA PHARMACIE :
-- Total employ├®s : ${employees.length}
-- Pharmaciens dipl├┤m├®s disponibles : ${pharmaciensPresents}/${pharmaciens.length}
-- Employ├®s pr├®sents aujourd'hui : ${totalPresents}/${employees.length}
+ÉTAT ACTUEL DE LA PHARMACIE :
+- Total employés : ${employees.length}
+- Pharmaciens diplômés disponibles : ${pharmaciensPresents}/${pharmaciens.length}
+- Employés présents aujourd'hui : ${totalPresents}/${employees.length}
 - Taux de couverture : ${couverture}%
-- Absences enregistr├®es : ${absences.length}
-- Niveau d'activit├® : ${activityLevel}
-- Planning g├®n├®r├® : ${currentSchedule.length > 0 ? 'Oui (' + new Set(currentSchedule.map(s=>s.day)).size + ' jours)' : 'Non'}
+- Absences enregistrées : ${absences.length}
+- Niveau d'activité : ${activityLevel}
+- Planning généré : ${currentSchedule.length > 0 ? 'Oui (' + new Set(currentSchedule.map(s=>s.day)).size + ' jours)' : 'Non'}
 
-R├êGLES R├ëGLEMENTAIRES OBLIGATOIRES :
-1. Au moins 1 pharmacien dipl├┤m├® par shift (LOI)
-2. Maximum 8h de travail par jour par employ├®
+RÈGLES RÉGLEMENTAIRES OBLIGATOIRES :
+1. Au moins 1 pharmacien diplômé par shift (LOI)
+2. Maximum 8h de travail par jour par employé
 3. Taux de couverture minimum : 60%
-4. Demande de cong├® : 14 jours minimum ├á l'avance
+4. Demande de congé : 14 jours minimum à l'avance
 
-TON R├öLE D'AGENT D├ëCISIONNEL :
-- Tu PRENDS des d├®cisions, tu ne te contentes pas de r├®pondre
-- Tu JUSTIFIES chaque d├®cision avec des donn├®es chiffr├®es
-- Tu ANTICIPES les probl├¿mes avant qu'ils arrivent
-- Tu PROPOSES des actions concr├¿tes
-- Tu ALERTES proactivement si tu d├®tectes un risque
-- Tes r├®ponses sont en fran├ºais, professionnelles et concises
-- Tu cites toujours les chiffres exacts (nombre d'employ├®s, taux, etc.)
+TON RÔLE D'AGENT DÉCISIONNEL :
+- Tu PRENDS des décisions, tu ne te contentes pas de répondre
+- Tu JUSTIFIES chaque décision avec des données chiffrées
+- Tu ANTICIPES les problèmes avant qu'ils arrivent
+- Tu PROPOSES des actions concrètes
+- Tu ALERTES proactivement si tu détectes un risque
+- Tes réponses sont en français, professionnelles et concises
+- Tu cites toujours les chiffres exacts (nombre d'employés, taux, etc.)
 
-FORMAT DE R├ëPONSE :
-- Commence par une d├®cision ou observation claire
-- Justifie avec les donn├®es disponibles
-- Propose toujours une action suivante concr├¿te
-- Si risque d├®tect├® : signale-le explicitement avec ­ƒÜ¿`;
+FORMAT DE RÉPONSE :
+- Commence par une décision ou observation claire
+- Justifie avec les données disponibles
+- Propose toujours une action suivante concrète
+- Si risque détecté : signale-le explicitement avec 🚨`;
 }
 
 // ===================================================================
-// ===== AGENT D├ëCISIONNEL PROACTIF =====
+// ===== AGENT DÉCISIONNEL PROACTIF =====
 // ===================================================================
 
 const decisionAgent = {
 
-    // Analyse automatique au d├®marrage
+    // Analyse automatique au démarrage
     async analyzeOnStartup() {
         const issues = [];
         const pharmaciens = employees.filter(e => e.role === 'pharmacien');
@@ -149,29 +149,29 @@ const decisionAgent = {
         const pharmaciensAbsents = absentsToday.filter(a => pharmaciens.find(p => p.id === a.employeeId));
 
         if (pharmaciensAbsents.length > 0) {
-            issues.push(`­ƒÜ¿ ${pharmaciensAbsents.length} pharmacien(s) absent(s) aujourd'hui`);
+            issues.push(`🚨 ${pharmaciensAbsents.length} pharmacien(s) absent(s) aujourd'hui`);
         }
         if (absences.length >= 3) {
-            issues.push(`ÔÜá´©Å ${absences.length} absences enregistr├®es cette semaine`);
+            issues.push(`⚠️ ${absences.length} absences enregistrées cette semaine`);
         }
         if (currentSchedule.length === 0) {
-            issues.push(`­ƒôà Aucun planning g├®n├®r├® pour la semaine`);
+            issues.push(`📅 Aucun planning généré pour la semaine`);
         }
 
         if (issues.length === 0) return null;
 
-        const prompt = `En tant qu'agent d├®cisionnel, analyse cette situation et donne une recommandation imm├®diate en 3-4 phrases maximum :
+        const prompt = `En tant qu'agent décisionnel, analyse cette situation et donne une recommandation immédiate en 3-4 phrases maximum :
 ${issues.join('\n')}
-Donne une d├®cision claire et actionnable.`;
+Donne une décision claire et actionnable.`;
 
         try {
             return await callGroqLLM(prompt, { maxTokens: 200 });
         } catch {
-            return issues.join('\n') + '\n\nÔåÆ V├®rifiez la couverture de l\'├®quipe imm├®diatement.';
+            return issues.join('\n') + '\n\n→ Vérifiez la couverture de l\'équipe immédiatement.';
         }
     },
 
-    // D├®cision justifi├®e pour une demande de cong├®
+    // Décision justifiée pour une demande de congé
     async decideLeave(employeeId, dateStr, dateLabel) {
         const employee = employees.find(e => e.id === employeeId);
         const pharmaciens = employees.filter(e => e.role === 'pharmacien' && e.diplome);
@@ -181,60 +181,60 @@ Donne une d├®cision claire et actionnable.`;
         const totalPresents = employees.length - absentsJour.length - 1;
         const couverture = Math.round((totalPresents / employees.length) * 100);
 
-        // R├¿gles dures
-        let decision = 'APPROUV├ë';
+        // Règles dures
+        let decision = 'APPROUVÉ';
         let motifRefus = '';
         if (pharmaciensRestants < 1) {
-            decision = 'REFUS├ë';
-            motifRefus = 'aucun pharmacien dipl├┤m├® disponible';
+            decision = 'REFUSÉ';
+            motifRefus = 'aucun pharmacien diplômé disponible';
         } else if (couverture < 60) {
-            decision = 'REFUS├ë';
+            decision = 'REFUSÉ';
             motifRefus = `taux de couverture insuffisant (${couverture}%)`;
         }
 
-        // Demande justification ├á Groq
-        const prompt = `Tu es l'agent RH d├®cisionnel. Voici une demande de cong├® :
-- Employ├® : ${employee.name} (${employee.role})
-- Date demand├®e : ${dateLabel}
-- Pharmaciens disponibles ce jour si approuv├® : ${pharmaciensRestants}
-- Taux de couverture si approuv├® : ${couverture}%
-- Absents d├®j├á ce jour : ${absentsJour.length}
-- D├ëCISION AUTOMATIQUE : ${decision}${motifRefus ? ' - Raison : ' + motifRefus : ''}
+        // Demande justification à Groq
+        const prompt = `Tu es l'agent RH décisionnel. Voici une demande de congé :
+- Employé : ${employee.name} (${employee.role})
+- Date demandée : ${dateLabel}
+- Pharmaciens disponibles ce jour si approuvé : ${pharmaciensRestants}
+- Taux de couverture si approuvé : ${couverture}%
+- Absents déjà ce jour : ${absentsJour.length}
+- DÉCISION AUTOMATIQUE : ${decision}${motifRefus ? ' - Raison : ' + motifRefus : ''}
 
-R├®dige une justification professionnelle de 2-3 phrases expliquant cette d├®cision ├á l'employ├®.`;
+Rédige une justification professionnelle de 2-3 phrases expliquant cette décision à l'employé.`;
 
         let justification = '';
         try {
             justification = await callGroqLLM(prompt, { maxTokens: 150 });
         } catch {
-            justification = decision === 'APPROUV├ë'
-                ? `La demande est approuv├®e. L'├®quipe maintient une couverture de ${couverture}% avec ${pharmaciensRestants} pharmacien(s) disponible(s).`
-                : `La demande est refus├®e car ${motifRefus}. Veuillez choisir une autre date.`;
+            justification = decision === 'APPROUVÉ'
+                ? `La demande est approuvée. L'équipe maintient une couverture de ${couverture}% avec ${pharmaciensRestants} pharmacien(s) disponible(s).`
+                : `La demande est refusée car ${motifRefus}. Veuillez choisir une autre date.`;
         }
 
         return { decision, pharmaciensRestants, couverture, absentsJour: absentsJour.length, justification };
     },
 
-    // Justification du planning g├®n├®r├®
+    // Justification du planning généré
     async justifySchedule(schedule, activityLevel) {
         const totalShifts = schedule.length;
         const shiftsAvecPharmacien = schedule.filter(s => s.pharmacistPresent).length;
         const jours = new Set(schedule.map(s => s.day)).size;
         const staffParShift = Math.round(schedule.reduce((sum, s) => sum + s.staff.length, 0) / totalShifts);
 
-        const prompt = `Tu es l'agent d├®cisionnel RH. Tu viens de g├®n├®rer ce planning :
-- ${jours} jours de travail planifi├®s
+        const prompt = `Tu es l'agent décisionnel RH. Tu viens de générer ce planning :
+- ${jours} jours de travail planifiés
 - ${totalShifts} shifts au total
-- ${shiftsAvecPharmacien}/${totalShifts} shifts avec pharmacien dipl├┤m├® (${Math.round(shiftsAvecPharmacien/totalShifts*100)}%)
-- Moyenne ${staffParShift} employ├®s par shift
-- Niveau d'activit├® : ${activityLevel}
+- ${shiftsAvecPharmacien}/${totalShifts} shifts avec pharmacien diplômé (${Math.round(shiftsAvecPharmacien/totalShifts*100)}%)
+- Moyenne ${staffParShift} employés par shift
+- Niveau d'activité : ${activityLevel}
 
 Justifie ce planning en 3 phrases : pourquoi ces choix sont optimaux, et s'il y a un point de vigilance.`;
 
         try {
             return await callGroqLLM(prompt, { maxTokens: 200 });
         } catch {
-            return `Planning g├®n├®r├® sur ${jours} jours avec ${shiftsAvecPharmacien}/${totalShifts} shifts conformes. Adapt├® au niveau d'activit├® "${activityLevel}".`;
+            return `Planning généré sur ${jours} jours avec ${shiftsAvecPharmacien}/${totalShifts} shifts conformes. Adapté au niveau d'activité "${activityLevel}".`;
         }
     },
 
@@ -243,31 +243,31 @@ Justifie ce planning en 3 phrases : pourquoi ces choix sont optimaux, et s'il y 
         const ratio = (ordonnances / employeesPresent).toFixed(1);
         let classification = ordonnances <= 120 ? 'Normal' : ordonnances <= 180 ? 'Attention' : 'Critique';
 
-        const prompt = `Tu es l'agent d├®cisionnel RH d'une pharmacie. Analyse cette situation de charge :
-- Ordonnances pr├®vues : ${ordonnances}/jour
-- Employ├®s pr├®sents : ${employeesPresent}
-- Ratio : ${ratio} ordonnances/employ├®
+        const prompt = `Tu es l'agent décisionnel RH d'une pharmacie. Analyse cette situation de charge :
+- Ordonnances prévues : ${ordonnances}/jour
+- Employés présents : ${employeesPresent}
+- Ratio : ${ratio} ordonnances/employé
 - Classification : ${classification}
 
-En tant qu'agent d├®cisionnel, donne :
-1. Une d├®cision imm├®diate (que faire maintenant)
-2. Une recommandation ├á court terme (cette semaine)
-Sois pr├®cis et chiffr├®. Maximum 4 phrases.`;
+En tant qu'agent décisionnel, donne :
+1. Une décision immédiate (que faire maintenant)
+2. Une recommandation à court terme (cette semaine)
+Sois précis et chiffré. Maximum 4 phrases.`;
 
         try {
             return await callGroqLLM(prompt, { maxTokens: 250 });
         } catch {
-            return `Niveau ${classification} d├®tect├®. Ratio de ${ratio} ordonnances/employ├®. ${classification === 'Critique' ? 'Action imm├®diate requise : renforts n├®cessaires.' : 'Situation surveill├®e.'}`;
+            return `Niveau ${classification} détecté. Ratio de ${ratio} ordonnances/employé. ${classification === 'Critique' ? 'Action immédiate requise : renforts nécessaires.' : 'Situation surveillée.'}`;
         }
     },
 
-    // R├®ponse conversationnelle intelligente
+    // Réponse conversationnelle intelligente
     async chat(userMessage) {
         const contextPrompt = `${buildAgentSystemPrompt()}
 
 L'utilisateur dit : "${userMessage}"
 
-R├®ponds en tant qu'agent d├®cisionnel : analyse la situation, prends une position claire, et propose une action concr├¿te. R├®ponse en fran├ºais, concise (max 5 phrases).`;
+Réponds en tant qu'agent décisionnel : analyse la situation, prends une position claire, et propose une action concrète. Réponse en français, concise (max 5 phrases).`;
 
         return await callGroqLLM(contextPrompt, { maxTokens: 400 });
     }
@@ -290,7 +290,7 @@ function initNavigation() {
 
 // ===== CHAT =====
 // =======================================================
-// INIT CHAT - VERSION CORRIG├ëE ET OPTIMIS├ëE (READY)
+// INIT CHAT - VERSION CORRIGÉE ET OPTIMISÉE (READY)
 // =======================================================
 
 function initChat() {
@@ -300,7 +300,7 @@ function initChat() {
     const chatMessages = document.getElementById('chat-messages');
     const quickActions = document.querySelectorAll('.quick-action');
 
-    // ÔÜá´©Å ID utilisateur connect├® (IMPORTANT)
+    // ⚠️ ID utilisateur connecté (IMPORTANT)
     const CURRENT_USER_ID = 5; // exemple : Alice Bernard
 
     // ===================================================
@@ -333,7 +333,7 @@ function initChat() {
             </div>
             <div class="message-content">
                 <div class="message-text">
-                    ÔÅ│ Agent en cours d'analyse...
+                    ⏳ Agent en cours d'analyse...
                 </div>
             </div>
         `;
@@ -350,11 +350,11 @@ function initChat() {
             // ===================================================
 
             const congeMatch = message.match(
-                /(\d{1,2})[\s/-]?(janvier|f├®vrier|mars|avril|mai|juin|juillet|ao├╗t|septembre|octobre|novembre|d├®cembre)[\s/-]?(\d{4})?/i
+                /(\d{1,2})[\s/-]?(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)[\s/-]?(\d{4})?/i
             );
 
 
-            if (message.toLowerCase().includes('cong├®') || message.toLowerCase().includes('vacance')) {
+            if (message.toLowerCase().includes('congé') || message.toLowerCase().includes('vacance')) {
 
                 // =====================================
                 // CAS 1 : PAS DE DATE
@@ -365,12 +365,12 @@ function initChat() {
                     typingDiv.remove();
 
                     addMessage(
-                        `­ƒôà <strong>Demande de cong├® d├®tect├®e</strong><br><br>
-                        Veuillez pr├®ciser la date souhait├®e.<br><br>
+                        `📅 <strong>Demande de congé détectée</strong><br><br>
+                        Veuillez préciser la date souhaitée.<br><br>
                         Exemple :<br>
-                        ÔÇó je veux un cong├® le 20 mars 2026<br>
-                        ÔÇó cong├® 15 avril<br>
-                        ÔÇó demander cong├® 3 mai`,
+                        • je veux un congé le 20 mars 2026<br>
+                        • congé 15 avril<br>
+                        • demander congé 3 mai`,
                         'bot'
                     );
 
@@ -464,17 +464,17 @@ async function handleChatLeaveRequestWithEmployeeSelection(message, match) {
 
     const moisMap = {
         'janvier': 1,
-        'f├®vrier': 2,
+        'février': 2,
         'mars': 3,
         'avril': 4,
         'mai': 5,
         'juin': 6,
         'juillet': 7,
-        'ao├╗t': 8,
+        'août': 8,
         'septembre': 9,
         'octobre': 10,
         'novembre': 11,
-        'd├®cembre': 12
+        'décembre': 12
     };
 
     const day = match[1];
@@ -488,7 +488,7 @@ async function handleChatLeaveRequestWithEmployeeSelection(message, match) {
     const chatMessages = document.getElementById('chat-messages');
     
     let html = `<div style="background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3); border-radius: 10px; padding: 1rem; margin: 1rem 0;">
-        <strong>­ƒæÑ Qui demande un cong├® pour le ${dateLabel} ?</strong><br><br>
+        <strong>👥 Qui demande un congé pour le ${dateLabel} ?</strong><br><br>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">`;
     
     employees.forEach(emp => {
@@ -550,24 +550,24 @@ async function handleChatLeaveRequestWithEmployeeSelection(message, match) {
 }
 
 // =======================================================
-// HANDLE LEAVE REQUEST - VERSION CORRIG├ëE
+// HANDLE LEAVE REQUEST - VERSION CORRIGÉE
 // =======================================================
 
 async function handleChatLeaveRequest(message, match, userId) {
 
     const moisMap = {
         'janvier': 1,
-        'f├®vrier': 2,
+        'février': 2,
         'mars': 3,
         'avril': 4,
         'mai': 5,
         'juin': 6,
         'juillet': 7,
-        'ao├╗t': 8,
+        'août': 8,
         'septembre': 9,
         'octobre': 10,
         'novembre': 11,
-        'd├®cembre': 12
+        'décembre': 12
     };
 
 
@@ -600,7 +600,7 @@ async function handleChatLeaveRequest(message, match, userId) {
         </div>
         <div class="message-content">
             <div class="message-text">
-                ­ƒñû Analyse d├®cisionnelle en cours...
+                🤖 Analyse décisionnelle en cours...
             </div>
         </div>
     `;
@@ -619,13 +619,13 @@ async function handleChatLeaveRequest(message, match, userId) {
             );
 
 
-        // Ajouter absence si approuv├®
-        if (result.decision === 'APPROUV├ë') {
+        // Ajouter absence si approuvé
+        if (result.decision === 'APPROUVÉ') {
 
             absences.push({
                 employeeId: userId,
                 date: dateStr,
-                reason: 'cong├®'
+                reason: 'congé'
             });
 
             saveState();
@@ -637,17 +637,17 @@ async function handleChatLeaveRequest(message, match, userId) {
 
 
         const icon =
-            result.decision === 'APPROUV├ë'
-                ? 'Ô£à'
-                : 'ÔØî';
+            result.decision === 'APPROUVÉ'
+                ? '✅'
+                : '❌';
 
 
         const response =
-            `­ƒôØ <strong>Demande de cong├® ÔÇö ${dateLabel}</strong><br><br>
-            ­ƒæ¿ÔÇìÔÜò´©Å Pharmaciens disponibles : ${result.pharmaciensRestants}<br>
-            ­ƒôè Taux de couverture : ${result.couverture}%<br>
-            ­ƒæÑ Absents ce jour : ${result.absentsJour}<br><br>
-            ${icon} <strong>D├®cision : ${result.decision}</strong><br><br>
+            `📝 <strong>Demande de congé — ${dateLabel}</strong><br><br>
+            👨‍⚕️ Pharmaciens disponibles : ${result.pharmaciensRestants}<br>
+            📊 Taux de couverture : ${result.couverture}%<br>
+            👥 Absents ce jour : ${result.absentsJour}<br><br>
+            ${icon} <strong>Décision : ${result.decision}</strong><br><br>
             ${result.justification}`;
 
 
@@ -662,7 +662,7 @@ async function handleChatLeaveRequest(message, match, userId) {
         typingDiv.remove();
 
         addMessage(
-            "ÔØî Erreur lors de l'analyse. R├®essayez.",
+            "❌ Erreur lors de l'analyse. Réessayez.",
             "bot"
         );
 
@@ -672,10 +672,10 @@ async function handleChatLeaveRequest(message, match, userId) {
 
 function getQuickActionMessage(query) {
     return {
-        'planning': "Quel est l'├®tat du planning et quelles sont tes recommandations ?",
-        'conges': "Quelle est la situation des cong├®s et que recommandes-tu ?",
-        'equipe': "Analyse l'├®tat actuel de l'├®quipe et identifie les risques.",
-        'conformite': "V├®rifie la conformit├® r├®glementaire et signale les probl├¿mes."
+        'planning': "Quel est l'état du planning et quelles sont tes recommandations ?",
+        'conges': "Quelle est la situation des congés et que recommandes-tu ?",
+        'equipe': "Analyse l'état actuel de l'équipe et identifie les risques.",
+        'conformite': "Vérifie la conformité réglementaire et signale les problèmes."
     }[query] || '';
 }
 
@@ -708,11 +708,11 @@ const conversationEngine = {
     analyzeIntents(msg) {
         const intents = [];
         if (msg.match(/planning|horaire|shift|semaine|travail|travaille/)) intents.push('planning');
-        if (msg.match(/je veux (un )?cong├®|demander (un )?cong├®/)) intents.push('demander_conge');
-        else if (msg.match(/cong├®|conges|vacance|repos/)) intents.push('info_conges');
-        if (msg.match(/├®quipe|team|personnel|combien|qui|pr├®sent/)) intents.push('equipe');
-        if (msg.match(/conformit├®|conforme|r├®gle|l├®gal|alerte/)) intents.push('conformite');
-        if (msg.match(/surcharge|activit├®|ordonnance|charge|critique/)) intents.push('surcharge');
+        if (msg.match(/je veux (un )?congé|demander (un )?congé/)) intents.push('demander_conge');
+        else if (msg.match(/congé|conges|vacance|repos/)) intents.push('info_conges');
+        if (msg.match(/équipe|team|personnel|combien|qui|présent/)) intents.push('equipe');
+        if (msg.match(/conformité|conforme|régle|légal|alerte/)) intents.push('conformite');
+        if (msg.match(/surcharge|activité|ordonnance|charge|critique/)) intents.push('surcharge');
         return intents.length > 0 ? intents : ['general'];
     },
     generateResponse(message) {
@@ -722,18 +722,18 @@ const conversationEngine = {
         const pharmaciens = employees.filter(e => e.role === 'pharmacien').length;
 
         if (intents.includes('equipe')) {
-            return `­ƒæÑ **├ëquipe** : ${presentCount}/${employees.length} pr├®sents\nÔÇó ${pharmaciens} pharmaciens dipl├┤m├®s\nÔÇó Couverture : ${Math.round(presentCount/employees.length*100)}%`;
+            return `👥 **Équipe** : ${presentCount}/${employees.length} présents\n• ${pharmaciens} pharmaciens diplômés\n• Couverture : ${Math.round(presentCount/employees.length*100)}%`;
         }
         if (intents.includes('planning')) {
             return currentSchedule.length > 0
-                ? `­ƒôà Planning actif sur ${new Set(currentSchedule.map(s=>s.day)).size} jours. Consultez l'onglet Planning.`
-                : `­ƒôà Aucun planning g├®n├®r├®. Allez dans l'onglet **Planning** pour en cr├®er un.`;
+                ? `📅 Planning actif sur ${new Set(currentSchedule.map(s=>s.day)).size} jours. Consultez l'onglet Planning.`
+                : `📅 Aucun planning généré. Allez dans l'onglet **Planning** pour en créer un.`;
         }
         if (intents.includes('conformite')) {
             const audit = complianceChecker.performAudit();
-            return `ÔÜû´©Å Conformit├® : **${audit.percentage}%** ${audit.allPassed ? 'Ô£à' : 'ÔÜá´©Å'}`;
+            return `⚖️ Conformité : **${audit.percentage}%** ${audit.allPassed ? '✅' : '⚠️'}`;
         }
-        return "Je suis votre assistant RH PharmaHR AI. Posez-moi vos questions sur le planning, les cong├®s, l'├®quipe ou la conformit├®.";
+        return "Je suis votre assistant RH PharmaHR AI. Posez-moi vos questions sur le planning, les congés, l'équipe ou la conformité.";
     }
 };
 
@@ -771,9 +771,9 @@ const schedulingEngine = {
     validateSchedule() {
         const shiftsWithout = currentSchedule.filter(s => !s.pharmacistPresent);
         if (shiftsWithout.length > 0) {
-            currentAlerts.push({ type: 'danger', title: 'Non-conformit├®', message: `${shiftsWithout.length} shift(s) sans pharmacien`, time: 'Maintenant' });
+            currentAlerts.push({ type: 'danger', title: 'Non-conformité', message: `${shiftsWithout.length} shift(s) sans pharmacien`, time: 'Maintenant' });
         } else {
-            currentAlerts.push({ type: 'success', title: 'Planning conforme', message: 'Toutes les contraintes respect├®es', time: 'Maintenant' });
+            currentAlerts.push({ type: 'success', title: 'Planning conforme', message: 'Toutes les contraintes respectées', time: 'Maintenant' });
         }
     }
 };
@@ -786,47 +786,47 @@ function initPlanning() {
     const alertsDiv = document.getElementById('planning-alerts');
 
     if (!generateBtn || !weekInput || !activitySelect) {
-        console.warn('ÔÜá´©Å ├ël├®ments de planning non trouv├®s');
+        console.warn('⚠️ Éléments de planning non trouvés');
         return;
     }
 
     const today = new Date();
     const currentWeek = `${today.getFullYear()}-W${getWeekNumber(today).toString().padStart(2, '0')}`;
     weekInput.value = currentWeek;
-    // Emp├¬cher la s├®lection de semaines pass├®es
+    // Empêcher la sélection de semaines passées
     weekInput.setAttribute('min', currentWeek);
 
     generateBtn.addEventListener('click', async () => {
         const selectedWeek = weekInput.value;
         
-        // V├®rifier que la semaine s├®lectionn├®e n'est pas dans le pass├®
+        // Vérifier que la semaine sélectionnée n'est pas dans le passé
         if (selectedWeek < currentWeek) {
-            showNotification('ÔØî Impossible de g├®n├®rer un planning pour une semaine pass├®e', 'danger');
+            showNotification('❌ Impossible de générer un planning pour une semaine passée', 'danger');
             return;
         }
         
         activityLevel = activitySelect.value;
-        showNotification('­ƒñû Agent en cours de planification...', 'info');
+        showNotification('🤖 Agent en cours de planification...', 'info');
 
         const schedule = schedulingEngine.generateSchedule(weekInput.value, activityLevel);
         displaySchedule(schedule, resultDiv);
         displayAlerts(currentAlerts, alertsDiv);
 
-        // Justification par l'agent d├®cisionnel
+        // Justification par l'agent décisionnel
         try {
             const justification = await decisionAgent.justifySchedule(schedule, activityLevel);
             const justifDiv = document.createElement('div');
             justifDiv.className = 'agent-justification';
             justifDiv.innerHTML = `
                 <div style="background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3); border-radius: 10px; padding: 1rem; margin-top: 1rem;">
-                    <strong>­ƒºá Analyse de l'agent d├®cisionnel :</strong><br><br>
+                    <strong>🧠 Analyse de l'agent décisionnel :</strong><br><br>
                     ${justification.replace(/\n/g, '<br>')}
                 </div>`;
             resultDiv.appendChild(justifDiv);
         } catch(e) {}
 
         updateDashboard();
-        showNotification('Ô£à Planning g├®n├®r├® et analys├® par l\'agent !', 'success');
+        showNotification('✅ Planning généré et analysé par l\'agent !', 'success');
     });
 }
 
@@ -840,20 +840,20 @@ function getWeekNumber(date) {
 
 function displaySchedule(schedule, container) {
     if (!schedule || schedule.length === 0) {
-        container.innerHTML = '<div class="empty-state"><p>Aucun planning g├®n├®r├®</p></div>';
+        container.innerHTML = '<div class="empty-state"><p>Aucun planning généré</p></div>';
         return;
     }
-    let html = `<div class="result-header"><h3>Planning Optimis├®</h3><span class="result-badge success">Ô£ô G├®n├®r├® par l'Agent</span></div>
-    <table class="planning-table"><thead><tr><th>Jour</th><th>P├®riode</th><th>Horaires</th><th>Personnel</th><th>Pharmacien</th></tr></thead><tbody>`;
+    let html = `<div class="result-header"><h3>Planning Optimisé</h3><span class="result-badge success">✓ Généré par l'Agent</span></div>
+    <table class="planning-table"><thead><tr><th>Jour</th><th>Période</th><th>Horaires</th><th>Personnel</th><th>Pharmacien</th></tr></thead><tbody>`;
     schedule.forEach(shift => {
         const pharmacist = shift.staff.find(s => s.role === 'pharmacien');
         const shiftClass = shift.shift === 'matin' ? 'shift-matin' : 'shift-apres-midi';
         html += `<tr>
             <td><strong>${shift.day}</strong></td>
-            <td><span class="shift-badge ${shiftClass}">${shift.shift === 'matin' ? 'Matin' : 'Apr├¿s-midi'}</span></td>
+            <td><span class="shift-badge ${shiftClass}">${shift.shift === 'matin' ? 'Matin' : 'Après-midi'}</span></td>
             <td>${shift.hours}</td>
             <td>${shift.staff.map(s => `<div>${s.name} <small>(${s.role})</small></div>`).join('')}</td>
-            <td>${pharmacist ? 'Ô£ô ' + pharmacist.name : 'Ô£ù Aucun'}</td>
+            <td>${pharmacist ? '✓ ' + pharmacist.name : '✗ Aucun'}</td>
         </tr>`;
     });
     html += '</tbody></table>';
@@ -865,7 +865,7 @@ function displayAlerts(alerts, container) {
     let html = '<div class="alerts-list">';
     alerts.forEach(alert => {
         const type = { success: 'success', warning: 'warning', danger: 'danger', info: 'success' }[alert.type] || 'success';
-        const icon = { success: 'Ô£ô', warning: 'ÔÜá', danger: 'Ô£ù', info: 'Ôä╣' }[alert.type] || 'Ô£ô';
+        const icon = { success: '✓', warning: '⚠', danger: '✗', info: 'ℹ' }[alert.type] || '✓';
         html += `<div class="alert-item ${type}"><div class="alert-icon">${icon}</div><div class="alert-text"><div class="alert-title">${alert.title}</div><div class="alert-time">${alert.message}</div></div></div>`;
     });
     html += '</div>';
@@ -887,7 +887,7 @@ function initSurchargeAnalysis() {
     const analyzeBtn = document.getElementById('analyze-surcharge');
 
     if (!analyzeBtn) {
-        console.warn('ÔÜá´©Å Bouton analyze-surcharge non trouv├®');
+        console.warn('⚠️ Bouton analyze-surcharge non trouvé');
         return;
     }
     const activityInput = document.getElementById('activity-input');
@@ -900,75 +900,75 @@ function initSurchargeAnalysis() {
         const employeesCount = parseInt(employeesInput.value);
         if (!ordonnances || ordonnances <= 0) { showNotification('Entrez un nombre valide', 'warning'); return; }
 
-        showNotification('­ƒñû Agent en analyse...', 'info');
+        showNotification('🤖 Agent en analyse...', 'info');
         const analysis = surchargeAnalyzer.analyze(ordonnances, employeesCount);
 
         resultDiv.innerHTML = `
             <div class="result-header">
-                <h3>Analyse de l'Agent D├®cisionnel</h3>
+                <h3>Analyse de l'Agent Décisionnel</h3>
                 <span class="result-badge ${analysis.color}">${analysis.classification}</span>
             </div>
             <div class="quick-stats">
                 <div class="quick-stat-item"><span class="quick-label">Ordonnances/jour:</span><span class="quick-value">${ordonnances}</span></div>
-                <div class="quick-stat-item"><span class="quick-label">Employ├®s pr├®sents:</span><span class="quick-value">${employeesCount}</span></div>
+                <div class="quick-stat-item"><span class="quick-label">Employés présents:</span><span class="quick-value">${employeesCount}</span></div>
                 <div class="quick-stat-item"><span class="quick-label">Ratio:</span><span class="quick-value">${analysis.ratio}</span></div>
             </div>`;
 
-        recommendationsDiv.innerHTML = '<div style="padding:1rem; color: var(--text-muted);">­ƒñû Agent en cours d\'analyse d├®cisionnelle...</div>';
+        recommendationsDiv.innerHTML = '<div style="padding:1rem; color: var(--text-muted);">🤖 Agent en cours d\'analyse décisionnelle...</div>';
 
         try {
             const groqAnalysis = await decisionAgent.analyzeSurchargeWithGroq(ordonnances, employeesCount);
             recommendationsDiv.innerHTML = `
                 <div style="background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3); border-radius: 10px; padding: 1.5rem;">
-                    <h3 style="margin-bottom:1rem;">­ƒºá D├®cision de l'Agent</h3>
+                    <h3 style="margin-bottom:1rem;">🧠 Décision de l'Agent</h3>
                     <p style="color: var(--text-secondary); line-height: 1.8;">${groqAnalysis.replace(/\n/g, '<br>')}</p>
                 </div>`;
         } catch(e) {
-            recommendationsDiv.innerHTML = `<div class="recommendation-item"><div class="recommendation-text">Classification : ${analysis.classification}. Ratio : ${analysis.ratio} ord/employ├®.</div></div>`;
+            recommendationsDiv.innerHTML = `<div class="recommendation-item"><div class="recommendation-text">Classification : ${analysis.classification}. Ratio : ${analysis.ratio} ord/employé.</div></div>`;
         }
 
-        showNotification('Ô£à Analyse d├®cisionnelle termin├®e !', 'success');
+        showNotification('✅ Analyse décisionnelle terminée !', 'success');
     });
 }
 
-// ===== CONFORMIT├ë =====
+// ===== CONFORMITÉ =====
 const complianceChecker = {
     rules: [
         {
-            id: 'pharmacist_presence', title: 'Pr├®sence Pharmacien Dipl├┤m├®', description: 'Au moins 1 pharmacien dipl├┤m├® par shift',
+            id: 'pharmacist_presence', title: 'Présence Pharmacien Diplômé', description: 'Au moins 1 pharmacien diplômé par shift',
             check: () => {
-                if (currentSchedule.length === 0) return { passed: true, details: 'Aucun planning ├á v├®rifier' };
+                if (currentSchedule.length === 0) return { passed: true, details: 'Aucun planning à vérifier' };
                 const v = currentSchedule.filter(s => !s.pharmacistPresent);
                 return { passed: v.length === 0, details: v.length === 0 ? 'Tous les shifts conformes' : `${v.length} shift(s) sans pharmacien` };
             }
         },
         {
-            id: 'max_hours', title: 'Dur├®e Maximale', description: 'Maximum 8h/jour',
+            id: 'max_hours', title: 'Durée Maximale', description: 'Maximum 8h/jour',
             check: () => {
-                if (currentSchedule.length === 0) return { passed: true, details: 'Aucun planning ├á v├®rifier' };
+                if (currentSchedule.length === 0) return { passed: true, details: 'Aucun planning à vérifier' };
                 const daily = {};
                 currentSchedule.forEach(s => s.staff.forEach(e => {
                     const k = `${e.id}_${s.day}`;
                     daily[k] = (daily[k] || 0) + s.totalHours;
                 }));
                 const v = Object.values(daily).filter(h => h > 8);
-                return { passed: v.length === 0, details: v.length === 0 ? 'Toutes les dur├®es conformes' : `${v.length} d├®passement(s)` };
+                return { passed: v.length === 0, details: v.length === 0 ? 'Toutes les durées conformes' : `${v.length} dépassement(s)` };
             }
         },
         {
             id: 'weekly_hours', title: 'Heures Hebdomadaires', description: 'Respect des contrats',
             check: () => {
-                if (currentSchedule.length === 0) return { passed: true, details: 'Aucun planning ├á v├®rifier' };
+                if (currentSchedule.length === 0) return { passed: true, details: 'Aucun planning à vérifier' };
                 const weekly = {};
                 currentSchedule.forEach(s => s.staff.forEach(e => { weekly[e.id] = (weekly[e.id] || { e, h: 0 }); weekly[e.id].h += s.totalHours; }));
                 const v = Object.values(weekly).filter(w => w.h > (employees.find(e => e.id === w.e?.id)?.maxHours || 40));
-                return { passed: v.length === 0, details: v.length === 0 ? 'Toutes les heures conformes' : `${v.length} d├®passement(s)` };
+                return { passed: v.length === 0, details: v.length === 0 ? 'Toutes les heures conformes' : `${v.length} dépassement(s)` };
             }
         },
         {
             id: 'coverage', title: 'Couverture des Shifts', description: 'Minimum 2 personnes/shift',
             check: () => {
-                if (currentSchedule.length === 0) return { passed: true, details: 'Aucun planning ├á v├®rifier' };
+                if (currentSchedule.length === 0) return { passed: true, details: 'Aucun planning à vérifier' };
                 const v = currentSchedule.filter(s => s.staff.length < 2);
                 return { passed: v.length === 0, details: v.length === 0 ? 'Tous les shifts couverts' : `${v.length} shift(s) insuffisant(s)` };
             }
@@ -985,28 +985,28 @@ function checkCompliance() {
     const checkBtn = document.getElementById('check-conformite');
 
     if (!checkBtn) {
-        console.warn('ÔÜá´©Å Bouton check-conformite non trouv├®');
+        console.warn('⚠️ Bouton check-conformite non trouvé');
         return;
     }
     const resultDiv = document.getElementById('conformite-result');
     checkBtn.addEventListener('click', () => {
-        showNotification('Audit de conformit├®...', 'info');
+        showNotification('Audit de conformité...', 'info');
         setTimeout(() => {
             const audit = complianceChecker.performAudit();
             displayComplianceResults(audit, resultDiv);
             updateDashboard();
-            showNotification('Audit termin├® !', 'success');
+            showNotification('Audit terminé !', 'success');
         }, 1500);
     });
 }
 
 function displayComplianceResults(audit, container) {
     const badgeClass = audit.allPassed ? 'success' : audit.percentage >= 75 ? 'warning' : 'danger';
-    let html = `<div class="result-header"><h3>R├®sultats de l'Audit</h3><span class="result-badge ${badgeClass}">${audit.percentage}% Conforme</span></div><div class="conformite-checks">`;
+    let html = `<div class="result-header"><h3>Résultats de l'Audit</h3><span class="result-badge ${badgeClass}">${audit.percentage}% Conforme</span></div><div class="conformite-checks">`;
     audit.results.forEach(r => {
         html += `<div class="conformite-check ${r.passed ? 'passed' : 'failed'}">
             <div class="check-info"><div class="check-title">${r.title}</div><div class="check-description">${r.description}</div><div class="check-description" style="margin-top:.5rem;font-weight:500">${r.details}</div></div>
-            <div class="check-status ${r.passed ? 'passed' : 'failed'}">${r.passed ? 'Ô£ô Conforme' : 'Ô£ù Non conforme'}</div>
+            <div class="check-status ${r.passed ? 'passed' : 'failed'}">${r.passed ? '✓ Conforme' : '✗ Non conforme'}</div>
         </div>`;
     });
     html += '</div>';
@@ -1017,7 +1017,7 @@ function displayComplianceResults(audit, container) {
 function initDashboard() { updateDashboard(); }
 function updateDashboard() {
     document.getElementById('stat-employees').textContent = employees.length;
-    document.getElementById('stat-activity').textContent = { normal:'Normal', eleve:'├ëlev├®', 'tres-eleve':'Tr├¿s ├ëlev├®' }[activityLevel] || 'Normal';
+    document.getElementById('stat-activity').textContent = { normal:'Normal', eleve:'Élevé', 'tres-eleve':'Très Élevé' }[activityLevel] || 'Normal';
     if (currentSchedule.length > 0) {
         document.getElementById('stat-hours').textContent = currentSchedule.reduce((s, sh) => s + sh.staff.length * sh.totalHours, 0) + 'h';
         document.getElementById('stat-compliance').textContent = complianceChecker.performAudit().percentage + '%';
@@ -1031,7 +1031,7 @@ function updateDashboard() {
         alertsContainer.innerHTML = '';
         currentAlerts.slice(0, 3).forEach(alert => {
             const type = { success:'success', warning:'warning', danger:'danger', info:'success' }[alert.type] || 'success';
-            const icon = { success:'Ô£ô', warning:'ÔÜá', danger:'Ô£ù', info:'Ôä╣' }[alert.type] || 'Ô£ô';
+            const icon = { success:'✓', warning:'⚠', danger:'✗', info:'ℹ' }[alert.type] || '✓';
             const div = document.createElement('div');
             div.className = `alert-item ${type}`;
             div.innerHTML = `<div class="alert-icon">${icon}</div><div class="alert-text"><div class="alert-title">${alert.title}</div><div class="alert-time">${alert.message}</div></div>`;
@@ -1058,17 +1058,17 @@ function initLeaveRequests() {
     const leaveEndInput = document.getElementById('leave-end');
 
     if (!submitBtn) {
-        console.warn('ÔÜá´©Å Bouton submit-leave non trouv├®');
+        console.warn('⚠️ Bouton submit-leave non trouvé');
         return;
     }
 
-    // D├®finir la date minimum ├á aujourd'hui pour emp├¬cher les dates pass├®es
+    // Définir la date minimum à aujourd'hui pour empêcher les dates passées
     const today = new Date();
     const todayStr = today.toISOString().split('T')[0];
     if (leaveStartInput) leaveStartInput.setAttribute('min', todayStr);
     if (leaveEndInput) leaveEndInput.setAttribute('min', todayStr);
 
-    // Synchroniser la date de fin avec la date de d├®but
+    // Synchroniser la date de fin avec la date de début
     if (leaveStartInput) {
         leaveStartInput.addEventListener('change', () => {
             if (leaveEndInput && leaveStartInput.value) {
@@ -1092,31 +1092,31 @@ function initLeaveRequests() {
         const now = new Date(); now.setHours(0,0,0,0);
         const daysLead = Math.round((start - now) / 86400000);
 
-        // V├®rifier que les dates ne sont pas dans le pass├®
+        // Vérifier que les dates ne sont pas dans le passé
         if (start < now) {
-            showNotification('ÔØî La date de d├®but ne peut pas ├¬tre dans le pass├®', 'danger');
+            showNotification('❌ La date de début ne peut pas être dans le passé', 'danger');
             return;
         }
         if (end < now) {
-            showNotification('ÔØî La date de fin ne peut pas ├¬tre dans le pass├®', 'danger');
+            showNotification('❌ La date de fin ne peut pas être dans le passé', 'danger');
             return;
         }
         if (end < start) {
-            showNotification('ÔØî La date de fin doit ├¬tre apr├¿s la date de d├®but', 'danger');
+            showNotification('❌ La date de fin doit être après la date de début', 'danger');
             return;
         }
 
-        if (daysLead < 14) { showNotification('D├®lai minimum 14 jours requis', 'warning'); return; }
+        if (daysLead < 14) { showNotification('Délai minimum 14 jours requis', 'warning'); return; }
 
-        validationDiv.innerHTML = '<div style="padding:1rem;color:var(--text-muted)">­ƒñû Agent d├®cisionnel en analyse...</div>';
-        showNotification('­ƒñû Agent en cours de d├®cision...', 'info');
+        validationDiv.innerHTML = '<div style="padding:1rem;color:var(--text-muted)">🤖 Agent décisionnel en analyse...</div>';
+        showNotification('🤖 Agent en cours de décision...', 'info');
 
         const result = await decisionAgent.decideLeave(employeeId, startDate, `${start.getDate()} ${start.toLocaleString('fr-FR',{month:'long'})} ${start.getFullYear()}`);
 
-        const request = { id: leaveCounter++, employeeId, employeeName: employee.name, startDate, endDate, type: leaveType, comment, status: result.decision === 'APPROUV├ë' ? 'approved' : 'rejected', submittedDate: new Date().toLocaleDateString('fr-FR') };
+        const request = { id: leaveCounter++, employeeId, employeeName: employee.name, startDate, endDate, type: leaveType, comment, status: result.decision === 'APPROUVÉ' ? 'approved' : 'rejected', submittedDate: new Date().toLocaleDateString('fr-FR') };
         leaveRequests.push(request);
 
-        if (result.decision === 'APPROUV├ë') {
+        if (result.decision === 'APPROUVÉ') {
             const msPerDay = 86400000;
             for (let d = new Date(start); d <= new Date(endDate); d = new Date(d.getTime() + msPerDay)) {
                 const dt = d.toISOString().slice(0,10);
@@ -1126,12 +1126,12 @@ function initLeaveRequests() {
             }
         }
 
-        const icon = result.decision === 'APPROUV├ë' ? 'Ô£à' : 'ÔØî';
+        const icon = result.decision === 'APPROUVÉ' ? '✅' : '❌';
         validationDiv.innerHTML = `
-            <div class="alert-item ${result.decision === 'APPROUV├ë' ? 'success' : 'warning'}" style="margin-top:1rem">
+            <div class="alert-item ${result.decision === 'APPROUVÉ' ? 'success' : 'warning'}" style="margin-top:1rem">
                 <div class="alert-icon">${icon}</div>
                 <div class="alert-text">
-                    <div class="alert-title">­ƒºá D├®cision de l'Agent : ${result.decision}</div>
+                    <div class="alert-title">🧠 Décision de l'Agent : ${result.decision}</div>
                     <div class="alert-time" style="margin-top:.5rem;line-height:1.6">${result.justification}</div>
                     <div class="alert-time" style="margin-top:.5rem">Pharmaciens disponibles : ${result.pharmaciensRestants} | Couverture : ${result.couverture}%</div>
                 </div>
@@ -1141,7 +1141,7 @@ function initLeaveRequests() {
         displayMyRequests();
         displayAbsences();
         updateDashboard();
-        showNotification(`D├®cision de l'agent : ${result.decision}`, result.decision === 'APPROUV├ë' ? 'success' : 'warning');
+        showNotification(`Décision de l'agent : ${result.decision}`, result.decision === 'APPROUVÉ' ? 'success' : 'warning');
     });
 
     displayMyRequests();
@@ -1153,8 +1153,8 @@ function displayMyRequests() {
     container.innerHTML = leaveRequests.map(req => `
         <div class="request-item ${req.status}">
             <div class="request-header">
-                <div><div class="request-title">${req.employeeName}</div><div class="request-period">${req.startDate} ÔåÆ ${req.endDate}</div></div>
-                <span class="request-status ${req.status}">${req.status === 'approved' ? 'Approuv├®e' : req.status === 'rejected' ? 'Rejet├®e' : 'En attente'}</span>
+                <div><div class="request-title">${req.employeeName}</div><div class="request-period">${req.startDate} → ${req.endDate}</div></div>
+                <span class="request-status ${req.status}">${req.status === 'approved' ? 'Approuvée' : req.status === 'rejected' ? 'Rejetée' : 'En attente'}</span>
             </div>
             <div class="request-comment">Type : ${req.type}${req.comment ? ' | ' + req.comment : ''}</div>
         </div>`).join('');
@@ -1167,11 +1167,11 @@ function initAbsences() {
     const absenceDateInput = document.getElementById('absence-date');
 
     if (!submitBtn) {
-        console.warn('ÔÜá´©Å Bouton submit-absence non trouv├®');
+        console.warn('⚠️ Bouton submit-absence non trouvé');
         return;
     }
 
-    // D├®finir la date minimum ├á aujourd'hui pour emp├¬cher les dates pass├®es
+    // Définir la date minimum à aujourd'hui pour empêcher les dates passées
     const today = new Date();
     const todayStr = today.toISOString().split('T')[0];
     if (absenceDateInput) absenceDateInput.setAttribute('min', todayStr);
@@ -1182,13 +1182,13 @@ function initAbsences() {
         const reason = document.getElementById('absence-reason').value;
         if (!employeeId || !date || !reason) { showNotification('Remplissez tous les champs', 'warning'); return; }
 
-        // V├®rifier que la date n'est pas dans le pass├®
+        // Vérifier que la date n'est pas dans le passé
         const absenceDate = new Date(date);
         absenceDate.setHours(0,0,0,0);
         const now = new Date();
         now.setHours(0,0,0,0);
         if (absenceDate < now) {
-            showNotification('ÔØî La date d\'absence ne peut pas ├¬tre dans le pass├®', 'danger');
+            showNotification('❌ La date d\'absence ne peut pas être dans le passé', 'danger');
             return;
         }
 
@@ -1196,8 +1196,8 @@ function initAbsences() {
         absences.push({ employeeId, date, reason });
         try { saveState(); } catch(e) {}
 
-        validationDiv.innerHTML = `<div class="alert-item success"><div class="alert-icon">Ô£ô</div><div class="alert-text"><div class="alert-title">Absence enregistr├®e</div><div class="alert-time">${employee.name} - ${date}</div></div></div>`;
-        showNotification('Absence enregistr├®e !', 'success');
+        validationDiv.innerHTML = `<div class="alert-item success"><div class="alert-icon">✓</div><div class="alert-text"><div class="alert-title">Absence enregistrée</div><div class="alert-time">${employee.name} - ${date}</div></div></div>`;
+        showNotification('Absence enregistrée !', 'success');
         displayAbsences();
         updateDashboard();
         checkPharmacistAvailability();
@@ -1210,7 +1210,7 @@ function displayAbsences() {
     const container = document.getElementById('current-absences-list');
     if (absences.length === 0) { container.innerHTML = '<div class="empty-state"><p>Aucune absence</p></div>'; return; }
     container.innerHTML = absences.map(abs => {
-        const emp = employees.find(e => e.id === abs.employeeId) || { name: `Employ├® (${abs.employeeId})` };
+        const emp = employees.find(e => e.id === abs.employeeId) || { name: `Employé (${abs.employeeId})` };
         return `<div class="absence-item"><div class="request-header"><div><div class="request-title">${emp.name}</div><div class="request-period">${abs.date}</div></div><div>${abs.reason}</div></div></div>`;
     }).join('');
 }
@@ -1219,8 +1219,8 @@ function checkPharmacistAvailability() {
     const pharmaciens = employees.filter(e => e.role === 'pharmacien' && e.diplome);
     const absentPharm = absences.filter(a => pharmaciens.find(p => p.id === a.employeeId)).length;
     if (absentPharm > 2) {
-        currentAlerts.unshift({ type: 'danger', title: '­ƒÜ¿ Alerte Pharmacien', message: `${absentPharm} pharmaciens absents`, time: "├Ç l'instant" });
-        showNotification('­ƒÜ¿ ALERTE : Capacit├® pharmacien compromise', 'warning');
+        currentAlerts.unshift({ type: 'danger', title: '🚨 Alerte Pharmacien', message: `${absentPharm} pharmaciens absents`, time: "À l'instant" });
+        showNotification('🚨 ALERTE : Capacité pharmacien compromise', 'warning');
     }
 }
 
@@ -1272,13 +1272,13 @@ function initSampleConversations() {
 
     conversations = [
         { id: 1, participant: { id: 1, name: "Dr. Sophie Martin", role: "Pharmacien Titulaire" }, lastMessage: "Parfait, merci !", lastTime: "Il y a 5 min", unread: 2 },
-        { id: 2, participant: { id: 5, name: "Alice Bernard", role: "Pr├®parateur" }, lastMessage: "Stock ibuprof├¿ne bas", lastTime: "Il y a 1h", unread: 0 }
+        { id: 2, participant: { id: 5, name: "Alice Bernard", role: "Préparateur" }, lastMessage: "Stock ibuprofène bas", lastTime: "Il y a 1h", unread: 0 }
     ];
     messages = [
         { id: 1, conversationId: 1, sender: 'me', text: "Peux-tu valider le planning ?", time: "10:30" },
         { id: 2, conversationId: 1, sender: 'other', text: "Oui, je regarde.", time: "10:32" },
         { id: 3, conversationId: 1, sender: 'other', text: "Parfait, merci !", time: "10:35" },
-        { id: 4, conversationId: 2, sender: 'other', text: "Stock ibuprof├¿ne bas", time: "14:21" }
+        { id: 4, conversationId: 2, sender: 'other', text: "Stock ibuprofène bas", time: "14:21" }
     ];
 }
 
@@ -1347,23 +1347,23 @@ function buildCommunicationFallbackReply(text, participant) {
         return `Avec plaisir. Je reste disponible si vous avez besoin d'un autre point, ${name}.`;
     }
     if (msg.match(/planning|horaire|shift|semaine/)) {
-        return "Bien re├ºu. Je v├®rifie le planning et je vous confirme les cr├®neaux disponibles dans les prochaines minutes.";
+        return "Bien reçu. Je vérifie le planning et je vous confirme les créneaux disponibles dans les prochaines minutes.";
     }
-    if (msg.match(/cong├®|absence|repos/)) {
-        return "Demande not├®e. Je pr├®pare les informations n├®cessaires pour validation RH (dates, couverture et impact ├®quipe).";
+    if (msg.match(/congé|absence|repos/)) {
+        return "Demande notée. Je prépare les informations nécessaires pour validation RH (dates, couverture et impact équipe).";
     }
     if (msg.match(/stock|rupture|commande/)) {
-        return "Alerte stock re├ºue. Je contr├┤le le niveau actuel et je lance un r├®approvisionnement prioritaire si n├®cessaire.";
+        return "Alerte stock reçue. Je contrôle le niveau actuel et je lance un réapprovisionnement prioritaire si nécessaire.";
     }
-    if (msg.match(/urgent|urgence|imm├®diat/)) {
-        return "Message urgent re├ºu. Je traite ce point en priorit├® et je reviens vers vous rapidement.";
+    if (msg.match(/urgent|urgence|immédiat/)) {
+        return "Message urgent reçu. Je traite ce point en priorité et je reviens vers vous rapidement.";
     }
 
-    return "Message bien re├ºu. Je prends en charge votre demande et je vous fais un retour clair d├¿s que possible.";
+    return "Message bien reçu. Je prends en charge votre demande et je vous fais un retour clair dès que possible.";
 }
 
 async function buildCommunicationReply(text, conversation) {
-    const participant = conversation?.participant || { name: 'Collaborateur', role: 'Employ├®' };
+    const participant = conversation?.participant || { name: 'Collaborateur', role: 'Employé' };
     const history = messages
         .filter(m => m.conversationId === conversation?.id)
         .slice(-6)
@@ -1374,21 +1374,21 @@ async function buildCommunicationReply(text, conversation) {
 
 Contexte :
 - Le message vient du RH
-- Tu r├®ponds comme employ├®: ${participant.name} (${participant.role})
-- R├®ponse en fran├ºais, naturelle, professionnelle, courte (1-2 phrases)
-- Si le RH demande une action, confirme clairement la prochaine ├®tape
-- N'invente pas de donn├®es chiffr├®es non demand├®es
+- Tu réponds comme employé: ${participant.name} (${participant.role})
+- Réponse en français, naturelle, professionnelle, courte (1-2 phrases)
+- Si le RH demande une action, confirme clairement la prochaine étape
+- N'invente pas de données chiffrées non demandées
 
-Historique r├®cent :
+Historique récent :
 ${history || 'Aucun historique'}
 
 Message RH : "${text}"
 
-R├®ponds uniquement avec le message de l'employ├®.`;
+Réponds uniquement avec le message de l'employé.`;
 
     try {
         const aiReply = await callGroqLLM(prompt, {
-            systemPrompt: "Tu es un employ├® d'une pharmacie qui r├®pond au RH de mani├¿re claire et professionnelle.",
+            systemPrompt: "Tu es un employé d'une pharmacie qui répond au RH de manière claire et professionnelle.",
             maxTokens: 120
         });
 
@@ -1413,7 +1413,7 @@ function sendCommunicationMessage() {
 
     const msg = { id: messages.length + 1, conversationId: targetConversationId, sender: 'me', text, time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) };
     messages.push(msg);
-    if (targetConversation) { targetConversation.lastMessage = text; targetConversation.lastTime = "├Ç l'instant"; }
+    if (targetConversation) { targetConversation.lastMessage = text; targetConversation.lastTime = "À l'instant"; }
     input.value = '';
     renderMessages(targetConversationId);
     renderConversationsList();
@@ -1430,7 +1430,7 @@ function sendCommunicationMessage() {
         messages.push(reply);
         if (targetConversation) {
             targetConversation.lastMessage = reply.text;
-            targetConversation.lastTime = "├Ç l'instant";
+            targetConversation.lastTime = "À l'instant";
             if (currentConversationId !== targetConversationId) {
                 targetConversation.unread = (targetConversation.unread || 0) + 1;
             }
@@ -1452,7 +1452,7 @@ function openNewConversationModal() {
         item.addEventListener('click', () => {
             const emp = employees.find(e => e.id === parseInt(item.dataset.id));
             if (emp) {
-                const conv = { id: conversations.length + 1, participant: { id: emp.id, name: emp.name, role: emp.role }, lastMessage: "Nouvelle conversation", lastTime: "├Ç l'instant", unread: 0 };
+                const conv = { id: conversations.length + 1, participant: { id: emp.id, name: emp.name, role: emp.role }, lastMessage: "Nouvelle conversation", lastTime: "À l'instant", unread: 0 };
                 conversations.unshift(conv);
                 renderConversationsList();
                 openConversation(conv.id);
@@ -1472,8 +1472,8 @@ function initSampleAnnouncements() {
     if (Array.isArray(announcements) && announcements.length > 0) return;
 
     announcements = [
-        { id: 1, title: "Nouvelle Proc├®dure S├®curit├®", priority: "urgent", message: "Tous les employ├®s doivent suivre la formation de s├®curit├® avant le 15 mars.", author: "Direction", date: "27 F├®vrier 2026", recipients: "Toute l'├®quipe" },
-        { id: 2, title: "Horaires Modifi├®s - 1er Mars", priority: "important", message: "La pharmacie fermera 1h plus t├┤t le mercredi 3 mars.", author: "Dr. Sophie Martin", date: "26 F├®vrier 2026", recipients: "Toute l'├®quipe" }
+        { id: 1, title: "Nouvelle Procédure Sécurité", priority: "urgent", message: "Tous les employés doivent suivre la formation de sécurité avant le 15 mars.", author: "Direction", date: "27 Février 2026", recipients: "Toute l'équipe" },
+        { id: 2, title: "Horaires Modifiés - 1er Mars", priority: "important", message: "La pharmacie fermera 1h plus tôt le mercredi 3 mars.", author: "Dr. Sophie Martin", date: "26 Février 2026", recipients: "Toute l'équipe" }
     ];
 }
 
@@ -1485,7 +1485,7 @@ function renderAnnouncements() {
     announcements.forEach(a => {
         const card = document.createElement('div');
         card.className = `announcement-card priority-${a.priority}`;
-        card.innerHTML = `<div class="announcement-header"><div><h4>${a.title}</h4><span class="announcement-priority ${a.priority}">${a.priority === 'urgent' ? 'Urgent' : a.priority === 'important' ? 'Important' : 'Normal'}</span></div></div><div class="announcement-body">${a.message}</div><div class="announcement-footer"><div class="announcement-author"><span>${a.author} ÔÇó ${a.date}</span></div><div class="announcement-recipients"><span>${a.recipients}</span></div></div>`;
+        card.innerHTML = `<div class="announcement-header"><div><h4>${a.title}</h4><span class="announcement-priority ${a.priority}">${a.priority === 'urgent' ? 'Urgent' : a.priority === 'important' ? 'Important' : 'Normal'}</span></div></div><div class="announcement-body">${a.message}</div><div class="announcement-footer"><div class="announcement-author"><span>${a.author} • ${a.date}</span></div><div class="announcement-recipients"><span>${a.recipients}</span></div></div>`;
         list.appendChild(card);
     });
 }
@@ -1496,14 +1496,14 @@ function publishAnnouncement() {
     const message = document.getElementById('announcement-message').value.trim();
     const recipients = document.getElementById('announcement-recipients').value;
     const validation = document.getElementById('announcement-validation');
-    if (!title || !message) { validation.innerHTML = '<div class="alert alert-error">ÔØî Remplissez tous les champs</div>'; return; }
-    const recipientsMap = { all: "Toute l'├®quipe", pharmaciens: 'Pharmaciens', preparateurs: 'Pr├®parateurs', administratif: 'Administratif' };
+    if (!title || !message) { validation.innerHTML = '<div class="alert alert-error">❌ Remplissez tous les champs</div>'; return; }
+    const recipientsMap = { all: "Toute l'équipe", pharmaciens: 'Pharmaciens', preparateurs: 'Préparateurs', administratif: 'Administratif' };
     announcements.unshift({ id: announcements.length + 1, title, priority, message, author: "Direction", date: new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }), recipients: recipientsMap[recipients] });
     renderAnnouncements();
     document.getElementById('announcement-title').value = '';
     document.getElementById('announcement-message').value = '';
-    validation.innerHTML = '<div class="alert alert-success">Ô£à Annonce publi├®e !</div>';
-    showNotification('Annonce publi├®e !', 'success');
+    validation.innerHTML = '<div class="alert alert-success">✅ Annonce publiée !</div>';
+    showNotification('Annonce publiée !', 'success');
     setTimeout(() => validation.innerHTML = '', 3000);
 }
 
@@ -1512,7 +1512,7 @@ function publishAnnouncement() {
 // ===================================================================
 
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('­ƒÜÇ PharmaHR AI v2.0 - Agent D├®cisionnel - D├®marrage');
+    console.log('🚀 PharmaHR AI v2.0 - Agent Décisionnel - Démarrage');
     loadState();
 
     initNavigation();
@@ -1538,21 +1538,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateDashboard();
     } catch(e) { console.warn('Erreur rendu', e); }
 
-    showNotification('­ƒñû PharmaHR AI v2.0 - Agent D├®cisionnel activ├® !', 'success');
+    showNotification('🤖 PharmaHR AI v2.0 - Agent Décisionnel activé !', 'success');
 
-    // Analyse proactive au d├®marrage
+    // Analyse proactive au démarrage
     setTimeout(async () => {
         try {
             const analysis = await decisionAgent.analyzeOnStartup();
             if (analysis) {
-                addMessage(`­ƒºá **Analyse proactive de l'agent au d├®marrage :**\n\n${analysis}`, 'bot');
-                // Navigation automatique d├®sactiv├®e - l'utilisateur peut naviguer manuellement
+                addMessage(`🧠 **Analyse proactive de l'agent au démarrage :**\n\n${analysis}`, 'bot');
+                // Navigation automatique désactivée - l'utilisateur peut naviguer manuellement
                 // document.querySelector('[data-view="chat"]').click();
             }
         } catch(e) {
-            console.warn('Analyse startup ├®chou├®e', e);
+            console.warn('Analyse startup échouée', e);
         }
     }, 2000);
 
-    console.log('Ô£à Agent D├®cisionnel PharmaHR AI v2.0 initialis├®');
+    console.log('✅ Agent Décisionnel PharmaHR AI v2.0 initialisé');
 });
